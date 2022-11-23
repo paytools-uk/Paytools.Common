@@ -20,7 +20,7 @@ public class TaxYear
         CountriesForTaxPurposes.Scotland
     };
 
-    public TaxYearEnding TaxYearEnding { get; private set; }
+    public TaxYearEnding TaxYearEnding { get; init; }
 
     public static TaxYearEnding Current => FromDate(DateOnly.FromDateTime(DateTime.Now));
 

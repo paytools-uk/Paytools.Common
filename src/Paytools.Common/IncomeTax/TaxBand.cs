@@ -1,9 +1,11 @@
 ﻿namespace Paytools.Common;
 
-public class TaxBand : ITaxBand
+public record TaxBand
 {
-    public string Description { get; set; } = default!;
-    public decimal? From { get; set; }
-    public decimal? To { get; set; }
-    public decimal Rate { get; set; }
+    public string Description { get; init; } = default!;
+    public decimal? From { get; init; }
+    public decimal? To { get; init; }
+    public decimal Rate { get; init; }
+    public bool IsBottomRate => From == null;
+    public bool IsTopRate => To == null;
 }

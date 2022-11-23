@@ -1,9 +1,7 @@
 ﻿namespace Paytools.Common;
 
-public class TaxBandSet //: ITaxBandSet
+public record TaxBandSet
 {
-    public TaxYearEnding ApplicableTaxYearEnding { get; set; }
-    public CountriesForTaxPurposes ApplicableCountries { get; set; }
-    public PersonalAllowance[] PersonalAllowances { get; set; } = Array.Empty<PersonalAllowance>();
-    public TaxBand[] TaxBands { get; set; } = Array.Empty<TaxBand>();
+    public TaxYearEnding ApplicableTaxYearEnding { get; init; }
+    public IReadOnlyList<TaxYearEntry> TaxYearEntries { get; init; } = default!;
 }

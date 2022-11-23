@@ -2,5 +2,5 @@
 
 public interface ITaxBandProvider
 {
-    ITaxBandSet GetBands(CountriesForTaxPurposes countries, TaxYearEnding yearEnding);
+    TaxBandSet GetBandsForTaxYear(TaxYear taxYear);
 }
