@@ -1,6 +1,8 @@
-﻿namespace Paytools.Common;
+﻿using System.Runtime.CompilerServices;
 
-public class TaxYear
+namespace Paytools.Common;
+
+public record TaxYear
 {
     private static readonly CountriesForTaxPurposes _defaultCountriesBefore6Apr2020 =
         CountriesForTaxPurposes.England | CountriesForTaxPurposes.Wales | CountriesForTaxPurposes.NorthernIreland;
@@ -22,16 +24,21 @@ public class TaxYear
 
     public TaxYearEnding TaxYearEnding { get; init; }
 
+    public DateOnly StartOfTaxYear { get; init; }
+    public DateOnly EndOfTaxYear { get; init; }
+
     public static TaxYearEnding Current => FromDate(DateOnly.FromDateTime(DateTime.Now));
 
     public TaxYear(TaxYearEnding taxYearEnding)
     {
         TaxYearEnding = taxYearEnding;
+        StartOfTaxYear = new DateOnly((int)TaxYearEnding - 1, 4, 6);
+        EndOfTaxYear = new DateOnly((int)TaxYearEnding, 4, 5);
     }
 
     public TaxYear(DateOnly taxDate)
+        : this(FromDate(taxDate))
     {
-        TaxYearEnding = FromDate(taxDate);
     }
 
     public static TaxYearEnding FromDate(DateOnly date)
@@ -44,16 +51,6 @@ public class TaxYear
             throw new ArgumentOutOfRangeException(nameof(taxYear), $"Unsupported tax year; date must fall within range tax year ending 6 April {(int)TaxYearEnding.MinValue} to 6 April {(int)TaxYearEnding.MaxValue}");
 
         return (TaxYearEnding)taxYear;
-    }
-
-    public CountriesForTaxPurposes GetDefaultCountriesForYear()
-    {
-        return TaxYearEnding switch
-        {
-            TaxYearEnding.Unspecified => throw new InvalidOperationException("Unable to retrieve default countries for uninitialised tax year"),
-            TaxYearEnding.Apr5_2019 => _defaultCountriesBefore6Apr2020,
-            _ => _defaultCountriesFrom6Apr2020
-        };
     }
 
     public CountriesForTaxPurposes[] GetCountriesForYear()
@@ -71,5 +68,57 @@ public class TaxYear
         var countriesForYear = GetCountriesForYear();
 
         return countriesForYear.Where(c => c == countries).Any();
+    }
+
+    public int GetTaxPeriod(DateOnly payDate, PayFrequency payFrequency)
+    {
+        if (payDate < StartOfTaxYear || payDate > EndOfTaxYear)
+            throw new ArgumentException($"Pay date of {payDate:d} is outside this tax year {StartOfTaxYear:d} - {EndOfTaxYear:d}", nameof(payDate));
+
+        switch (payFrequency)
+        {
+            case PayFrequency.Annually:
+                return 1;
+
+            case PayFrequency.Monthly:
+                var startOfCalendarYear = new DateOnly((int)TaxYearEnding, 1, 1);
+                var monthNumber = payDate.Month + (payDate >= startOfCalendarYear && payDate <= EndOfTaxYear ? 12 : 0) - 3;
+                var dayOfMonth = payDate.Day;
+                return monthNumber - (dayOfMonth >= 1 && dayOfMonth <= 5 ? 1 : 0);
+
+            default:
+                var dayNumber = payDate.DayNumber - StartOfTaxYear.DayNumber + 1;
+                var dayCountPerPeriod = payFrequency switch
+                {
+                    PayFrequency.Weekly => 7,
+                    PayFrequency.TwoWeekly => 14,
+                    PayFrequency.FourWeekly => 28,
+                    _ => throw new ArgumentException($"Invalid pay frequency value {payFrequency}", nameof(PayFrequency))
+                };
+                return (int)Math.Ceiling((float)dayNumber / dayCountPerPeriod);
+        }
+    }
+
+    public static int GetTaxPeriodCount(PayFrequency payFrequency)
+    {
+        return payFrequency switch
+        {
+            PayFrequency.Weekly => 52,
+            PayFrequency.TwoWeekly => 26,
+            PayFrequency.FourWeekly => 13,
+            PayFrequency.Monthly => 12,
+            PayFrequency.Annually => 1,
+            _ => throw new ArgumentException($"Invalid pay frequency value {payFrequency}", nameof(PayFrequency))
+        };
+    }
+
+    public CountriesForTaxPurposes GetDefaultCountriesForYear()
+    {
+        return TaxYearEnding switch
+        {
+            TaxYearEnding.Unspecified => throw new InvalidOperationException("Unable to retrieve default countries for uninitialised tax year"),
+            TaxYearEnding.Apr5_2019 => _defaultCountriesBefore6Apr2020,
+            _ => _defaultCountriesFrom6Apr2020
+        };
     }
 }
