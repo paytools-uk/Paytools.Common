@@ -65,14 +65,4 @@ public class TaxYearTests
         TaxYear.FromDate(new DateOnly((int)TaxYearEnding.MinValue, 4, 6));
         Assert.Throws<ArgumentException>(action);
     }
-
-    [Fact]
-    public void TestTaxYearPeriodCounts()
-    {
-        Assert.Equal(52, TaxYear.GetTaxPeriodCount(PayFrequency.Weekly));
-        Assert.Equal(26, TaxYear.GetTaxPeriodCount(PayFrequency.TwoWeekly));
-        Assert.Equal(13, TaxYear.GetTaxPeriodCount(PayFrequency.FourWeekly));
-        Assert.Equal(12, TaxYear.GetTaxPeriodCount(PayFrequency.Monthly));
-        Assert.Equal(1, TaxYear.GetTaxPeriodCount(PayFrequency.Annually));
-    }
 }

@@ -99,18 +99,18 @@ public record TaxYear
         }
     }
 
-    public static int GetTaxPeriodCount(PayFrequency payFrequency)
-    {
-        return payFrequency switch
-        {
-            PayFrequency.Weekly => 52,
-            PayFrequency.TwoWeekly => 26,
-            PayFrequency.FourWeekly => 13,
-            PayFrequency.Monthly => 12,
-            PayFrequency.Annually => 1,
-            _ => throw new ArgumentException($"Invalid pay frequency value {payFrequency}", nameof(PayFrequency))
-        };
-    }
+    //public static int GetTaxPeriodCount(PayFrequency payFrequency)
+    //{
+    //    return payFrequency switch
+    //    {
+    //        PayFrequency.Weekly => 52,
+    //        PayFrequency.TwoWeekly => 26,
+    //        PayFrequency.FourWeekly => 13,
+    //        PayFrequency.Monthly => 12,
+    //        PayFrequency.Annually => 1,
+    //        _ => throw new ArgumentException($"Invalid pay frequency value {payFrequency}", nameof(PayFrequency))
+    //    };
+    //}
 
     public CountriesForTaxPurposes GetDefaultCountriesForYear()
     {
