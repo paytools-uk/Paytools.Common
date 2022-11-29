@@ -1,9 +1,8 @@
-﻿using System.Diagnostics;
-
-namespace Paytools.Common;
+﻿namespace Paytools.Common;
 
 public enum PayFrequency
 {
+    Unspecified,
     Weekly,
     TwoWeekly,
     FourWeekly,
