@@ -2,6 +2,10 @@
 
 namespace Paytools.Common;
 
+/// <summary>
+/// Represents one or more countries within the United Kingdom for tax purposes.  For example,
+/// Scotland has had its own thresholds and rates of income tax since 2016.
+/// </summary>
 [Flags]
 public enum CountriesForTaxPurposes
 {
