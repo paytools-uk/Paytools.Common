@@ -14,6 +14,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5D01BE0D-6F85-4FC8-B09B-8674B45B52A7}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build-and-deploy.yml = .github\workflows\build-and-deploy.yml
+		build\GetBuildVersion.psm1 = build\GetBuildVersion.psm1
 		README.md = README.md
 		LICENSE.txt = LICENSE.txt
 	EndProjectSection
