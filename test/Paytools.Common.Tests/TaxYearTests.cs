@@ -65,4 +65,10 @@ public class TaxYearTests
         TaxYear.FromDate(new DateOnly((int)TaxYearEnding.MinValue, 4, 6));
         Assert.Throws<ArgumentException>(action);
     }
+
+    [Fact]
+    public void FailingTestForTestPurposes()
+    {
+        Assert.True(false);
+    }
 }
