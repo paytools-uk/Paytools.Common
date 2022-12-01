@@ -5,6 +5,6 @@ Key capabilities within the Paytools.Common namespace
 
 ### Build Status
 
-[![.NET](https://github.com/paytools-uk/Paytools.Common/actions/workflows/dotnet.yml/badge.svg)](https://github.com/paytools-uk/Paytools.Common/actions/workflows/dotnet.yml)
+[![build-and-deploy](https://github.com/paytools-uk/Paytools.Common/actions/workflows/build-and-deploy.yml/badge.svg)](https://github.com/paytools-uk/Paytools.Common/actions/workflows/build-and-deploy.yml)
 
 More to follow.
